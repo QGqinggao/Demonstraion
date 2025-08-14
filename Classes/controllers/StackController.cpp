@@ -68,7 +68,10 @@ void StackController::updateCoverRelations()
 
 	for (auto cardController : _stackCardControllers)
 	{
-		cardController->setCanSelect(StackController::getCardModel(cardController->getCardId()).id);
+		auto cardModel = StackController::getCardModel(cardController->getCardId());
+		cardController->setCanSelect(cardModel.canSelect);
+		std::string str = (cardModel.canSelect ? "true" : "false");
+		CCLOG("The Card %d is can select : %s", cardModel.id, str.c_str());
 	}
 }
 
@@ -198,4 +201,11 @@ void StackController::replaceTrayWithStack(int cardId)
 	_stackCardControllers.erase(itCardController, _stackCardControllers.end());
 
 	StackController::updateCoverRelations();
+}
+
+void StackController::registerCardClickCallback(std::shared_ptr<CardController> cardController)
+{
+	cardController->setClickCallback(
+		std::bind(&StackController::_onCardClickCallback, this, std::placeholders::_1)
+	);
 }

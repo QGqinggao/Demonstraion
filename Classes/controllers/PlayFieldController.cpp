@@ -12,13 +12,12 @@ void PlayFieldController::init(const std::vector<CardModel>& playFieldCards)
 
 	_playFieldCardControllers.clear();
 
-	for (const auto cardModel : _playFieldCards)
+	for (const auto& cardModel : _playFieldCards)
 	{
 		auto cardController = std::make_shared<CardController>();
 		cardController->init(std::make_shared<CardModel>(cardModel));
-		cardController->setClickCallback(
-			std::bind(&PlayFieldController::_onCardClickCallback, this, std::placeholders::_1)
-		);
+		PlayFieldController::registerCardClickCallback(cardController);
+		
 		_playFieldCardControllers.push_back(cardController);
 	}
 }
@@ -65,7 +64,10 @@ void PlayFieldController::updateCoverRelations()
 
 	for (auto cardController : _playFieldCardControllers)
 	{
-		cardController->setCanSelect(PlayFieldController::getCardModel(cardController->getCardId()).id);
+		auto cardModel = PlayFieldController::getCardModel(cardController->getCardId());
+		cardController->setCanSelect(cardModel.canSelect);
+		std::string str = (cardModel.canSelect ? "true" : "false");
+		CCLOG("The Card %d is can select : %s", cardModel.id, str.c_str());
 	}
 }
 
@@ -144,3 +146,9 @@ void PlayFieldController::replaceTrayWithPlayFieldCard(int cardId)
 	PlayFieldController::updateCoverRelations();
 }
 
+void PlayFieldController::registerCardClickCallback(std::shared_ptr<CardController> cardController)
+{
+	cardController->setClickCallback(
+		std::bind(&PlayFieldController::_onCardClickCallback, this, std::placeholders::_1)
+	);
+}

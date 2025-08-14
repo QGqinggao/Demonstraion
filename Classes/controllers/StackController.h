@@ -93,6 +93,11 @@ public:
 	/// </summary>
 	/// <param name="newTrayCardController"></param>
 	void replaceTray(std::shared_ptr<CardController> newTrayCardController);
+	/// <summary>
+	/// 注册卡牌点击
+	/// </summary>
+	/// <param name="cardController"></param>
+	void registerCardClickCallback(std::shared_ptr<CardController> cardController);
 
 private:
 	std::vector<CardModel> _stackCards;

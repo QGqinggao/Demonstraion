@@ -72,6 +72,11 @@ public:
 	/// </summary>
 	/// <param name="cardId"></param>
 	void replaceTrayWithPlayFieldCard(int cardId);
+	/// <summary>
+	/// 注册卡牌点击
+	/// </summary>
+	/// <param name="cardController"></param>
+	void registerCardClickCallback(std::shared_ptr<CardController> cardController);
 
 private:
 	std::vector<CardModel> _playFieldCards;
@@ -81,9 +86,9 @@ private:
 
 	std::unordered_map<int, std::vector<int>> _coverMap;
 
+	std::function<void(int cardId)> _cardClickCallback;
 	void _onCardClickCallback(int cardId);
 
-	std::function<void(int cardId)> _cardClickCallback;
 };
 
 

@@ -167,6 +167,7 @@ void GameController::handleUndo(const UndoStep& step)
 			{
 				_playFieldController->pushController(cardController);
 				_playFieldController->pushModel(cardController->getModel());
+				_playFieldController->registerCardClickCallback(trayCardController);
 			}
 			else
 			{
@@ -183,6 +184,7 @@ void GameController::handleUndo(const UndoStep& step)
 
 	_playFieldController->updateCoverRelations();
 	_stackController->updateCoverRelations();
+
 }
 
 std::shared_ptr<CardController> GameController::getPlayFieldCardController(int cardId)
